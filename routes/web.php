@@ -11,7 +11,7 @@ use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('alumnos.index'); // o la vista principal que tengas
 });
 Route::resource('alumnos', AlumnoController::class);
 Route::resource('docentes', DocenteController::class);

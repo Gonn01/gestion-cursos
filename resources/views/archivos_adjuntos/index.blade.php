@@ -6,7 +6,7 @@
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="h4">Archivos Adjuntos</h2>
-            <a href="{{ route('archivos.create') }}" class="btn btn-success">Subir Archivo</a>
+            <a href="{{ route('archivos_adjuntos.create') }}" class="btn btn-success">Subir Archivo</a>
         </div>
 
         @if(session('success'))
@@ -32,7 +32,7 @@
                             <td>{{ $archivo->nombre }}</td>
                             <td><a href="{{ asset('storage/' . $archivo->ruta) }}" target="_blank">Ver</a></td>
                             <td class="text-end">
-                                <form action="{{ route('archivos.destroy', $archivo) }}" method="POST"
+                                <form action="{{ route('archivos_adjuntos.destroy', $archivo) }}" method="POST"
                                     onsubmit="return confirm('¿Eliminar archivo?')" class="d-inline">
                                     @csrf
                                     @method('DELETE')

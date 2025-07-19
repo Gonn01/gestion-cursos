@@ -16,7 +16,8 @@
             </div>
         @endif
 
-        <form action="{{ route('archivos.store') }}" method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+        <form action="{{ route('archivos_adjuntos.store') }}" method="POST" enctype="multipart/form-data"
+            class="card p-4 shadow-sm">
             @csrf
 
             <div class="mb-3">

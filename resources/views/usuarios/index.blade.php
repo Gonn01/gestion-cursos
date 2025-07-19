@@ -1,46 +1,49 @@
 @extends('layouts.app')
 
-@section('title', 'Subir Archivo')
+@section('title', 'Listado de Usuarios')
 
 @section('content')
     <div class="container mt-4">
-        <h2>Subir nuevo archivo</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Usuarios</h2>
+            <a href="{{ route('usuarios.create') }}" class="btn btn-primary">Crear Usuario</a>
+        </div>
 
-        @if($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <form action="{{ route('archivos.store') }}" method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
-            @csrf
-
-            <div class="mb-3">
-                <label class="form-label">Curso</label>
-                <select name="curso_id" class="form-select" required>
-                    <option value="">Seleccionar</option>
-                    @foreach($cursos as $curso)
-                        <option value="{{ $curso->id }}" @selected(old('curso_id') == $curso->id)>{{ $curso->nombre }}</option>
+        @if($usuarios->isEmpty())
+            <div class="alert alert-warning">No hay usuarios registrados.</div>
+        @else
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($usuarios as $usuario)
+                        <tr>
+                            <td>{{ $usuario->name }}</td>
+                            <td>{{ $usuario->email }}</td>
+                            <td>{{ ucfirst($usuario->rol) }}</td>
+                            <td>
+                                <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-sm btn-warning">Editar</a>
+                                <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" class="d-inline"
+                                    onsubmit="return confirm('¿Eliminar usuario?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Nombre del archivo</label>
-                <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Archivo</label>
-                <input type="file" name="archivo" class="form-control" required>
-            </div>
-
-            <button type="submit" class="btn btn-success">Subir</button>
-            <a href="{{ route('archivos.index') }}" class="btn btn-secondary">Cancelar</a>
-        </form>
+                </tbody>
+            </table>
+        @endif
     </div>
 @endsection

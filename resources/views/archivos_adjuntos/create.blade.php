@@ -16,7 +16,8 @@
             </div>
         @endif
 
-        <form action="{{ route('archivos.store') }}" method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+        <form action="{{ route('archivos_adjuntos.store') }}" method="POST" enctype="multipart/form-data"
+            class="card p-4 shadow-sm">
             @csrf
 
             <div class="mb-3">
@@ -40,7 +41,7 @@
             </div>
 
             <button type="submit" class="btn btn-success">Subir</button>
-            <a href="{{ route('archivos.index') }}" class="btn btn-secondary">Cancelar</a>
+            <a href="{{ route('archivos_adjuntos.index') }}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>
 @endsection

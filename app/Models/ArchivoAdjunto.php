@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ArchivoAdjunto extends Model
 {
+    protected $table = 'archivos_adjuntos';
     protected $fillable = ['curso_id', 'archivo', 'tipo'];
 }

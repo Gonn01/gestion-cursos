@@ -34,7 +34,8 @@
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('evaluaciones.index') }}">Evaluaciones</a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('archivos.index') }}">Archivos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('archivos_adjuntos.index') }}">Archivos</a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('usuarios.index') }}">Usuarios</a></li>
                 </ul>
             </div>

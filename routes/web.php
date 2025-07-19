@@ -18,5 +18,5 @@ Route::resource('docentes', DocenteController::class);
 Route::resource('cursos', CursoController::class);
 Route::resource('inscripciones', InscripcionController::class);
 Route::resource('evaluaciones', EvaluacionController::class);
-Route::resource('archivos', ArchivoAdjuntoController::class);
+Route::resource('archivos_adjuntos', ArchivoAdjuntoController::class);
 Route::resource('usuarios', UserController::class);

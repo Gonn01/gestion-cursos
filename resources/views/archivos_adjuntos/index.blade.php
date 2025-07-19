@@ -6,7 +6,7 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Archivos del Curso</h2>
-            <a href="{{ route('archivos.create') }}" class="btn btn-primary">Subir Archivo</a>
+            <a href="{{ route('archivos_adjuntos.create') }}" class="btn btn-primary">Subir Archivo</a>
         </div>
 
         @if(session('success'))

@@ -10,13 +10,13 @@ class ArchivoAdjuntoController extends Controller
     public function index()
     {
         $archivos = ArchivoAdjunto::with('curso')->get();
-        return view('archivos.index', compact('archivos'));
+        return view('archivos_adjuntos.index', compact('archivos'));
     }
 
     public function create()
     {
         $cursos = Curso::all();
-        return view('archivos.create', compact('cursos'));
+        return view('archivos_adjuntos.create', compact('cursos'));
     }
 
     public function store(Request $request)
@@ -26,7 +26,7 @@ class ArchivoAdjuntoController extends Controller
             'archivo' => 'required|mimes:pdf,docx,ppt,jpg,png|max:2048',
         ]);
 
-        $file = $request->file('archivo')->store('archivos');
+        $file = $request->file('archivo')->store('archivos_adjuntos');
 
         ArchivoAdjunto::create([
             'curso_id' => $request->curso_id,
@@ -34,7 +34,7 @@ class ArchivoAdjuntoController extends Controller
             'tipo' => $request->file('archivo')->extension(),
         ]);
 
-        return redirect()->route('archivos.index')->with('success', 'Archivo adjunto subido.');
+        return redirect()->route('archivos_adjuntos.index')->with('success', 'Archivo adjunto subido.');
     }
 
     public function destroy(ArchivoAdjunto $archivo)
@@ -42,6 +42,6 @@ class ArchivoAdjuntoController extends Controller
         \Storage::delete($archivo->archivo);
         $archivo->delete();
 
-        return redirect()->route('archivos.index')->with('success', 'Archivo eliminado.');
+        return redirect()->route('archivos_adjuntos.index')->with('success', 'Archivo eliminado.');
     }
 }

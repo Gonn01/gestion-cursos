@@ -2,63 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Evaluacion;
 use Illuminate\Http\Request;
 
 class EvaluacionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $evaluaciones = Evaluacion::with(['alumno', 'curso'])->get();
+        return view('evaluaciones.index', compact('evaluaciones'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $alumnos = Alumno::all();
+        $cursos = Curso::all();
+        return view('evaluaciones.create', compact('alumnos', 'cursos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'alumno_id' => 'required|exists:alumnos,id',
+            'curso_id' => 'required|exists:cursos,id',
+            'nota' => 'required|integer|min:1|max:10',
+        ]);
+
+        Evaluacion::create($request->all());
+        return redirect()->route('evaluaciones.index')->with('success', 'Evaluación registrada.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Evaluacion $evaluacion)
     {
-        //
+        $alumnos = Alumno::all();
+        $cursos = Curso::all();
+        return view('evaluaciones.edit', compact('evaluacion', 'alumnos', 'cursos'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Evaluacion $evaluacion)
     {
-        //
+        $request->validate([
+            'alumno_id' => 'required|exists:alumnos,id',
+            'curso_id' => 'required|exists:cursos,id',
+            'nota' => 'required|integer|min:1|max:10',
+        ]);
+
+        $evaluacion->update($request->all());
+        return redirect()->route('evaluaciones.index')->with('success', 'Evaluación actualizada.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Evaluacion $evaluacion)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $evaluacion->delete();
+        return redirect()->route('evaluaciones.index')->with('success', 'Evaluación eliminada.');
     }
 }

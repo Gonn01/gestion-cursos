@@ -3,62 +3,52 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Docente;
 class DocenteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $docentes = Docente::all();
+        return view('docentes.index', compact('docentes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('docentes.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required',
+            'dni' => 'required|numeric|digits_between:7,8|unique:docentes,dni',
+            'email' => 'required|email|unique:docentes,email',
+        ]);
+
+        Docente::create($request->all());
+        return redirect()->route('docentes.index')->with('success', 'Docente registrado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Docente $docente)
     {
-        //
+        return view('docentes.edit', compact('docente'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Docente $docente)
     {
-        //
+        $request->validate([
+            'nombre' => 'required',
+            'dni' => 'required|numeric|digits_between:7,8|unique:docentes,dni,' . $docente->id,
+            'email' => 'required|email|unique:docentes,email,' . $docente->id,
+        ]);
+
+        $docente->update($request->all());
+        return redirect()->route('docentes.index')->with('success', 'Docente actualizado correctamente.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Docente $docente)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $docente->delete();
+        return redirect()->route('docentes.index')->with('success', 'Docente eliminado.');
     }
 }

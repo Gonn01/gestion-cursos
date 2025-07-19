@@ -2,63 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inscripcion;
 use Illuminate\Http\Request;
 
 class InscripcionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $inscripciones = Inscripcion::with(['alumno', 'curso'])->get();
+        return view('inscripciones.index', compact('inscripciones'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $alumnos = Alumno::all();
+        $cursos = Curso::all();
+        return view('inscripciones.create', compact('alumnos', 'cursos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'alumno_id' => 'required|exists:alumnos,id',
+            'curso_id' => 'required|exists:cursos,id',
+            'estado' => 'required|in:activo,aprobado,desaprobado',
+            'nota' => 'nullable|integer|min:1|max:10',
+            'asistencia' => 'nullable|integer|min:0|max:100',
+        ]);
+
+        Inscripcion::create($request->all());
+        return redirect()->route('inscripciones.index')->with('success', 'Inscripción registrada.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Inscripcion $inscripcion)
     {
-        //
+        $alumnos = Alumno::all();
+        $cursos = Curso::all();
+        return view('inscripciones.edit', compact('inscripcion', 'alumnos', 'cursos'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Inscripcion $inscripcion)
     {
-        //
+        $request->validate([
+            'alumno_id' => 'required|exists:alumnos,id',
+            'curso_id' => 'required|exists:cursos,id',
+            'estado' => 'required|in:activo,aprobado,desaprobado',
+            'nota' => 'nullable|integer|min:1|max:10',
+            'asistencia' => 'nullable|integer|min:0|max:100',
+        ]);
+
+        $inscripcion->update($request->all());
+        return redirect()->route('inscripciones.index')->with('success', 'Inscripción actualizada.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Inscripcion $inscripcion)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $inscripcion->delete();
+        return redirect()->route('inscripciones.index')->with('success', 'Inscripción eliminada.');
     }
 }

@@ -2,63 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArchivoAdjunto;
 use Illuminate\Http\Request;
 
 class ArchivoAdjuntoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $archivos = ArchivoAdjunto::with('curso')->get();
+        return view('archivos.index', compact('archivos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $cursos = Curso::all();
+        return view('archivos.create', compact('cursos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'curso_id' => 'required|exists:cursos,id',
+            'archivo' => 'required|mimes:pdf,docx,ppt,jpg,png|max:2048',
+        ]);
+
+        $file = $request->file('archivo')->store('archivos');
+
+        ArchivoAdjunto::create([
+            'curso_id' => $request->curso_id,
+            'archivo' => $file,
+            'tipo' => $request->file('archivo')->extension(),
+        ]);
+
+        return redirect()->route('archivos.index')->with('success', 'Archivo adjunto subido.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(ArchivoAdjunto $archivo)
     {
-        //
-    }
+        \Storage::delete($archivo->archivo);
+        $archivo->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('archivos.index')->with('success', 'Archivo eliminado.');
     }
 }

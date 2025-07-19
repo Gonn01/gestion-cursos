@@ -6,6 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
-    protected $table = 'cursos';
-    protected $fillable = ['nombre', 'estado', 'modalidad', 'aula_virtual', 'docente_id', 'limite_inscriptos'];
+    protected $fillable = [
+        'titulo',
+        'descripcion',
+        'modalidad',
+        'aula_virtual',
+        'fecha_inicio',
+        'fecha_fin',
+        'cupo_maximo',
+        'activo',
+        'docente_id'
+    ];
+
+    public function docente()
+    {
+        return $this->belongsTo(Docente::class);
+    }
+
+    public function inscripciones()
+    {
+        return $this->hasMany(Inscripcion::class);
+    }
 }

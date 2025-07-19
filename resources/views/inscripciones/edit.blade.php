@@ -3,43 +3,52 @@
 @section('title', 'Editar Inscripción')
 
 @section('content')
-    <div class="container mt-4">
-        <h2>Editar Inscripción</h2>
+    <div class="container mt-5">
+        <h2 class="h4 mb-4">Editar Inscripción</h2>
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                    @foreach ($errors->all() as $e)
+                        <li>{{ $e }}</li>
                     @endforeach
                 </ul>
             </div>
         @endif
 
-        <form action="{{ route('inscripciones.update', $inscripcion->id) }}" method="POST" class="card p-4 shadow-sm">
+        <form action="{{ route('inscripciones.update', $inscripcion) }}" method="POST" class="card p-4 shadow-sm">
             @csrf
             @method('PUT')
 
             <div class="mb-3">
-                <label class="form-label">ID Alumno</label>
-                <input type="number" name="alumno_id" class="form-control"
-                    value="{{ old('alumno_id', $inscripcion->alumno_id) }}" required>
+                <label class="form-label">Alumno</label>
+                <select name="alumno_id" class="form-select" required>
+                    @foreach ($alumnos as $alumno)
+                        <option value="{{ $alumno->id }}" @selected(old('alumno_id', $inscripcion->alumno_id) == $alumno->id)>
+                            {{ $alumno->nombre }} ({{ $alumno->dni }})
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">ID Curso</label>
-                <input type="number" name="curso_id" class="form-control"
-                    value="{{ old('curso_id', $inscripcion->curso_id) }}" required>
+                <label class="form-label">Curso</label>
+                <select name="curso_id" class="form-select" required>
+                    @foreach ($cursos as $curso)
+                        <option value="{{ $curso->id }}" @selected(old('curso_id', $inscripcion->curso_id) == $curso->id)>
+                            {{ $curso->titulo }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Fecha de Inscripción</label>
-                <input type="date" name="fecha" class="form-control" value="{{ old('fecha', $inscripcion->fecha) }}"
+                <input type="date" name="fecha" value="{{ old('fecha', $inscripcion->fecha) }}" class="form-control"
                     required>
             </div>
 
-            <button type="submit" class="btn btn-primary">Actualizar</button>
-            <a href="{{ route('inscripciones.index') }}" class="btn btn-secondary">Cancelar</a>
+            <button class="btn btn-primary">Actualizar Inscripción</button>
         </form>
     </div>
 @endsection

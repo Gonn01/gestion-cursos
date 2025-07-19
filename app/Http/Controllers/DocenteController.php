@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Docente;
+use Illuminate\Http\Request;
+
 class DocenteController extends Controller
 {
     public function index()
@@ -20,13 +21,16 @@ class DocenteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255',
             'dni' => 'required|numeric|digits_between:7,8|unique:docentes,dni',
             'email' => 'required|email|unique:docentes,email',
+            'fecha_nacimiento' => 'required|date|before:-18 years',
+            'activo' => 'required|boolean',
         ]);
 
         Docente::create($request->all());
-        return redirect()->route('docentes.index')->with('success', 'Docente registrado correctamente.');
+
+        return redirect()->route('docentes.index')->with('success', 'Docente creado correctamente.');
     }
 
     public function edit(Docente $docente)
@@ -37,18 +41,21 @@ class DocenteController extends Controller
     public function update(Request $request, Docente $docente)
     {
         $request->validate([
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255',
             'dni' => 'required|numeric|digits_between:7,8|unique:docentes,dni,' . $docente->id,
             'email' => 'required|email|unique:docentes,email,' . $docente->id,
+            'fecha_nacimiento' => 'required|date|before:-18 years',
+            'activo' => 'required|boolean',
         ]);
 
         $docente->update($request->all());
+
         return redirect()->route('docentes.index')->with('success', 'Docente actualizado correctamente.');
     }
 
     public function destroy(Docente $docente)
     {
         $docente->delete();
-        return redirect()->route('docentes.index')->with('success', 'Docente eliminado.');
+        return redirect()->route('docentes.index')->with('success', 'Docente eliminado correctamente.');
     }
 }

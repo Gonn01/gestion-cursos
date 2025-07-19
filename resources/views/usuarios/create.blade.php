@@ -1,50 +1,55 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Usuario')
+@section('title', isset($usuario) ? 'Editar Usuario' : 'Nuevo Usuario')
 
 @section('content')
-    <div class="container mt-4">
-        <h2>Crear nuevo usuario</h2>
+    <div class="container mt-5">
+        <h2 class="h4 mb-4">{{ isset($usuario) ? 'Editar Usuario' : 'Crear Usuario' }}</h2>
 
         @if($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                    @foreach($errors->all() as $e)
+                        <li>{{ $e }}</li>
                     @endforeach
                 </ul>
             </div>
         @endif
 
-        <form action="{{ route('usuarios.store') }}" method="POST" class="card p-4 shadow-sm">
+        <form action="{{ isset($usuario) ? route('usuarios.update', $usuario->id) : route('usuarios.store') }}"
+            method="POST" class="card p-4 shadow-sm">
             @csrf
+            @if(isset($usuario))
+                @method('PUT')
+            @endif
 
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+                <input type="text" name="name" value="{{ old('name', $usuario->name ?? '') }}" class="form-control"
+                    required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                <input type="email" name="email" value="{{ old('email', $usuario->email ?? '') }}" class="form-control"
+                    required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Rol</label>
                 <select name="rol" class="form-select" required>
-                    <option value="">Seleccionar</option>
-                    <option value="admin" @selected(old('rol') == 'admin')>Admin</option>
-                    <option value="coordinador" @selected(old('rol') == 'coordinador')>Coordinador</option>
+                    <option value="admin" @selected(old('rol', $usuario->rol ?? '') == 'admin')>Admin</option>
+                    <option value="coordinador" @selected(old('rol', $usuario->rol ?? '') == 'coordinador')>Coordinador
+                    </option>
                 </select>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Contraseña</label>
-                <input type="password" name="password" class="form-control" required>
+                <label class="form-label">Contraseña {{ isset($usuario) ? '(dejar vacío para mantener)' : '' }}</label>
+                <input type="password" name="password" class="form-control" {{ isset($usuario) ? '' : 'required' }}>
             </div>
 
-            <button type="submit" class="btn btn-success">Guardar</button>
-            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Cancelar</a>
+            <button class="btn btn-success">{{ isset($usuario) ? 'Actualizar' : 'Guardar' }}</button>
         </form>
     </div>
 @endsection

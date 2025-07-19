@@ -25,6 +25,9 @@ class AlumnoController extends Controller
             'dni' => 'required|numeric|digits_between:7,8|unique:alumnos,dni',
             'email' => 'required|email|unique:alumnos,email',
             'fecha_nacimiento' => 'required|date|before:-16 years',
+            'telefono' => 'nullable|string',
+            'direccion' => 'nullable|string',
+            'genero' => 'nullable|in:Masculino,Femenino,Otro',
         ]);
 
         Alumno::create($request->all());
@@ -39,11 +42,15 @@ class AlumnoController extends Controller
     public function update(Request $request, Alumno $alumno)
     {
         $request->validate([
-            'nombre' => 'required',
+            'nombre' => 'required|string',
             'dni' => 'required|numeric|digits_between:7,8|unique:alumnos,dni,' . $alumno->id,
             'email' => 'required|email|unique:alumnos,email,' . $alumno->id,
             'fecha_nacimiento' => 'required|date|before:-16 years',
+            'telefono' => 'nullable|string',
+            'direccion' => 'nullable|string',
+            'genero' => 'nullable|in:Masculino,Femenino,Otro',
         ]);
+
 
         $alumno->update($request->all());
         return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado correctamente.');

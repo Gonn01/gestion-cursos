@@ -3,14 +3,14 @@
 @section('title', 'Nueva Inscripción')
 
 @section('content')
-    <div class="container mt-4">
-        <h2>Nueva Inscripción</h2>
+    <div class="container mt-5">
+        <h2 class="h4 mb-4">Inscribir Alumno a un Curso</h2>
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                    @foreach ($errors->all() as $e)
+                        <li>{{ $e }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -20,22 +20,36 @@
             @csrf
 
             <div class="mb-3">
-                <label class="form-label">ID Alumno</label>
-                <input type="number" name="alumno_id" class="form-control" value="{{ old('alumno_id') }}" required>
+                <label class="form-label">Alumno</label>
+                <select name="alumno_id" class="form-select" required>
+                    <option value="">Seleccione un alumno</option>
+                    @foreach ($alumnos as $alumno)
+                        <option value="{{ $alumno->id }}" @selected(old('alumno_id') == $alumno->id)>
+                            {{ $alumno->nombre }} ({{ $alumno->dni }})
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">ID Curso</label>
-                <input type="number" name="curso_id" class="form-control" value="{{ old('curso_id') }}" required>
+                <label class="form-label">Curso</label>
+                <select name="curso_id" class="form-select" required>
+                    <option value="">Seleccione un curso</option>
+                    @foreach ($cursos as $curso)
+                        <option value="{{ $curso->id }}" @selected(old('curso_id') == $curso->id)>
+                            {{ $curso->titulo }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Fecha de Inscripción</label>
-                <input type="date" name="fecha" class="form-control" value="{{ old('fecha') }}" required>
+                <input type="date" name="fecha" value="{{ old('fecha', now()->format('Y-m-d')) }}" class="form-control"
+                    required>
             </div>
 
-            <button type="submit" class="btn btn-success">Guardar</button>
-            <a href="{{ route('inscripciones.index') }}" class="btn btn-secondary">Cancelar</a>
+            <button class="btn btn-success">Guardar Inscripción</button>
         </form>
     </div>
 @endsection

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Evaluacion;
 use Illuminate\Http\Request;
+use App\Models\Alumno;
+use App\Models\Curso;
 
 class EvaluacionController extends Controller
 {

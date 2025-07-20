@@ -12,15 +12,16 @@ return new class extends Migration {
     {
         Schema::create('cursos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->enum('estado', ['activo', 'finalizado', 'cancelado']);
+            $table->string('titulo');
+            $table->text('descripcion')->nullable();
             $table->enum('modalidad', ['presencial', 'virtual', 'hibrido']);
             $table->string('aula_virtual')->nullable();
-            $table->unsignedBigInteger('docente_id');
-            $table->integer('limite_inscriptos')->default(30);
+            $table->date('fecha_inicio');
+            $table->date('fecha_fin');
+            $table->unsignedInteger('cupo_maximo');
+            $table->boolean('activo')->default(true);
+            $table->foreignId('docente_id')->constrained('docentes')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('docente_id')->references('id')->on('docentes')->onDelete('cascade');
         });
     }
 

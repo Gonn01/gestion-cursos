@@ -14,9 +14,9 @@ class UserController extends Controller
         return view('usuarios.index', compact('usuarios'));
     }
 
-    public function create()
+    public function form(User $usuario = null)
     {
-        return view('usuarios.form');
+        return view('usuarios.form', compact('usuario'));
     }
 
     public function store(Request $request)
@@ -36,11 +36,6 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
-    }
-
-    public function edit(User $usuario)
-    {
-        return view('usuarios.form', compact('usuario'));
     }
 
     public function update(Request $request, User $usuario)

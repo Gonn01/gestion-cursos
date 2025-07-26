@@ -13,7 +13,7 @@ class DocenteController extends Controller
         return view('docentes.index', compact('docentes'));
     }
 
-    public function create()
+    public function form()
     {
         return view('docentes.form');
     }
@@ -43,11 +43,6 @@ class DocenteController extends Controller
         ]));
 
         return redirect()->route('docentes.index')->with('success', 'Docente creado correctamente.');
-    }
-
-    public function edit(Docente $docente)
-    {
-        return view('docentes.form', compact('docente'));
     }
 
     public function update(Request $request, Docente $docente)

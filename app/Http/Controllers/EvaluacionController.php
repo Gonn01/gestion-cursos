@@ -15,11 +15,11 @@ class EvaluacionController extends Controller
         return view('evaluaciones.index', compact('evaluaciones'));
     }
 
-    public function create()
+    public function form(Evaluacion $evaluacion = null)
     {
         $alumnos = Alumno::all();
         $cursos = Curso::all();
-        return view('evaluaciones.form', compact('alumnos', 'cursos'));
+        return view('evaluaciones.form', compact('evaluacion', 'alumnos', 'cursos'));
     }
 
     public function store(Request $request)
@@ -41,13 +41,6 @@ class EvaluacionController extends Controller
         ]));
 
         return redirect()->route('evaluaciones.index')->with('success', 'Evaluación registrada.');
-    }
-
-    public function edit(Evaluacion $evaluacion)
-    {
-        $alumnos = Alumno::all();
-        $cursos = Curso::all();
-        return view('evaluaciones.form', compact('evaluacion', 'alumnos', 'cursos'));
     }
 
     public function update(Request $request, Evaluacion $evaluacion)

@@ -16,12 +16,12 @@ class InscripcionController extends Controller
         return view('inscripciones.index', compact('inscripciones'));
     }
 
-    public function create()
+    public function form(Inscripcion $inscripcion = null)
     {
         $alumnos = Alumno::where('activo', true)->get();
         $cursos = Curso::where('estado', 'activo')->get();
 
-        return view('inscripciones.form', compact('alumnos', 'cursos'));
+        return view('inscripciones.form', compact('inscripcion', 'alumnos', 'cursos'));
     }
 
     public function store(Request $request)
@@ -74,14 +74,6 @@ class InscripcionController extends Controller
         ]);
 
         return redirect()->route('inscripciones.index')->with('success', 'Inscripción registrada.');
-    }
-
-    public function edit(Inscripcion $inscripcion)
-    {
-        $alumnos = Alumno::where('activo', true)->get();
-        $cursos = Curso::where('estado', 'activo')->get();
-
-        return view('inscripciones.form', compact('inscripcion', 'alumnos', 'cursos'));
     }
 
     public function update(Request $request, Inscripcion $inscripcion)

@@ -14,11 +14,12 @@ class CursoController extends Controller
         return view('cursos.index', compact('cursos'));
     }
 
-    public function create()
+    public function form(Curso $curso = null)
     {
         $docentes = Docente::where('activo', true)->get();
-        return view('cursos.form', compact('docentes'));
+        return view('cursos.form', compact('curso', 'docentes'));
     }
+
 
     public function store(Request $request)
     {
@@ -59,12 +60,6 @@ class CursoController extends Controller
         ]));
 
         return redirect()->route('cursos.index')->with('success', 'Curso creado con éxito.');
-    }
-
-    public function edit(Curso $curso)
-    {
-        $docentes = Docente::where('activo', true)->get();
-        return view('cursos.form', compact('curso', 'docentes'));
     }
 
     public function update(Request $request, Curso $curso)

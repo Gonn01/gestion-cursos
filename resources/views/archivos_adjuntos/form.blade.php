@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Subir Archivo')
+@section('title', isset($archivo) ? 'Editar Archivo' : 'Subir Archivo')
 
 @section('content')
     <div class="container mt-5">
-        <h2 class="h4 mb-4">Subir Archivo a un Curso</h2>
+        <h2 class="h4 mb-4">{{ isset($archivo) ? 'Editar Archivo' : 'Subir Archivo a un Curso' }}</h2>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -16,16 +16,20 @@
             </div>
         @endif
 
-        <form action="{{ route('archivos_adjuntos.store') }}" method="POST" enctype="multipart/form-data"
-            class="card p-4 shadow-sm">
+        <form
+            action="{{ isset($archivo) ? route('archivos_adjuntos.update', $archivo) : route('archivos_adjuntos.store') }}"
+            method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
             @csrf
+            @if (isset($archivo))
+                @method('PUT')
+            @endif
 
             <div class="mb-3">
                 <label class="form-label">Curso</label>
                 <select name="curso_id" class="form-select" required>
                     <option value="">Seleccione un curso</option>
                     @foreach ($cursos as $curso)
-                        <option value="{{ $curso->id }}" @selected(old('curso_id') == $curso->id)>
+                        <option value="{{ $curso->id }}" @selected(old('curso_id', $archivo->curso_id ?? '') == $curso->id)>
                             {{ $curso->titulo }}
                         </option>
                     @endforeach
@@ -33,29 +37,15 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Título del archivo</label>
-                <input type="text" name="titulo" value="{{ old('titulo') }}" class="form-control" required>
+                <label class="form-label">Archivo</label>
+                <input type="file" name="archivo" class="form-control" {{ isset($archivo) ? '' : 'required' }}>
+                @if (isset($archivo))
+                    <small class="text-muted">Archivo actual: <a href="{{ asset($archivo->archivo) }}" target="_blank">Ver
+                            archivo</a></small>
+                @endif
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Tipo de archivo</label>
-                <select name="tipo" class="form-select" required>
-                    <option value="">Seleccione un tipo</option>
-                    <option value="tarea" @selected(old('tipo') == 'tarea')>Tarea</option>
-                    <option value="material" @selected(old('tipo') == 'material')>Material</option>
-                    <option value="guía" @selected(old('tipo') == 'guía')>Guía</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Archivo (PDF, DOCX, PPT, JPG, PNG)</label>
-                <input type="file" name="archivo" class="form-control" required>
-            </div>
-
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-success">Subir Archivo</button>
-                <a href="{{ route('archivos_adjuntos.index') }}" class="btn btn-secondary">Cancelar</a>
-            </div>
+            <button class="btn btn-success">{{ isset($archivo) ? 'Actualizar' : 'Subir Archivo' }}</button>
         </form>
     </div>
 @endsection

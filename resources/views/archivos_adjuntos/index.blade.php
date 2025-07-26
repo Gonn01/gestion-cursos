@@ -34,7 +34,7 @@
                                 <td>{{ $archivo->titulo }}</td>
                                 <td>{{ ucfirst($archivo->tipo) }}</td>
                                 <td>
-                                    <a href="{{ asset('storage/' . $archivo->archivo_url) }}" target="_blank">Ver</a>
+                                    <a href="{{ asset($archivo->archivo_url) }}" target="_blank">Ver</a>
                                 </td>
                                 <td class="text-end">
                                     <form action="{{ route('archivos_adjuntos.destroy', $archivo) }}" method="POST"

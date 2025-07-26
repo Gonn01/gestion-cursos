@@ -13,9 +13,9 @@ class AlumnoController extends Controller
         return view('alumnos.index', compact('alumnos'));
     }
 
-    public function create()
+    public function form(Alumno $alumno = null)
     {
-        return view('alumnos.form');
+        return view('alumnos.form', compact('alumno'));
     }
 
     public function store(Request $request)
@@ -29,25 +29,12 @@ class AlumnoController extends Controller
             'telefono' => 'nullable|string',
             'direccion' => 'nullable|string',
             'genero' => 'required|in:masculino,femenino,otro',
+            'activo' => 'required|in:0,1',
         ]);
 
-        Alumno::create($request->only([
-            'nombre',
-            'apellido',
-            'dni',
-            'email',
-            'fecha_nacimiento',
-            'telefono',
-            'direccion',
-            'genero'
-        ]));
+        Alumno::create($request->all());
 
         return redirect()->route('alumnos.index')->with('success', 'Alumno creado correctamente.');
-    }
-
-    public function edit(Alumno $alumno)
-    {
-        return view('alumnos.form', compact('alumno'));
     }
 
     public function update(Request $request, Alumno $alumno)
@@ -61,18 +48,10 @@ class AlumnoController extends Controller
             'telefono' => 'nullable|string',
             'direccion' => 'nullable|string',
             'genero' => 'required|in:masculino,femenino,otro',
+            'activo' => 'required|in:0,1',
         ]);
 
-        $alumno->update($request->only([
-            'nombre',
-            'apellido',
-            'dni',
-            'email',
-            'fecha_nacimiento',
-            'telefono',
-            'direccion',
-            'genero'
-        ]));
+        $alumno->update($request->all());
 
         return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado correctamente.');
     }

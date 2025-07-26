@@ -63,3 +63,9 @@ INSERT INTO archivos_adjuntos
 VALUES
     (1, 1, 'Apuntes Iniciales', 'programacion1_apuntes.pdf', 'material', '2025-07-15', '2025-07-26 14:21:02', '2025-07-26 14:21:02'),
     (2, 2, 'Tarea Diseño', 'diseno_tarea1.jpg', 'tarea', '2025-07-16', '2025-07-26 14:21:02', '2025-07-26 14:21:02');
+ALTER TABLE archivos_adjuntos MODIFY tipo VARCHAR
+(10);
+ALTER TABLE archivos_adjuntos 
+MODIFY fecha_subida DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE archivos_adjuntos MODIFY titulo VARCHAR
+(255) DEFAULT 'Sin título';

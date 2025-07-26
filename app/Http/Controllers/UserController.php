@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('usuarios.create');
+        return view('usuarios.form');
     }
 
     public function store(Request $request)
@@ -40,7 +40,7 @@ class UserController extends Controller
 
     public function edit(User $usuario)
     {
-        return view('usuarios.edit', compact('usuario'));
+        return view('usuarios.form', compact('usuario'));
     }
 
     public function update(Request $request, User $usuario)

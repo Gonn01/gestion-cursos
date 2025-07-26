@@ -25,6 +25,11 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Apellido</label>
+                <input type="text" name="apellido" class="form-control" value="{{ old('apellido') }}" required>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">DNI</label>
                 <input type="text" name="dni" class="form-control" value="{{ old('dni') }}" required>
             </div>
@@ -41,8 +46,28 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Teléfono</label>
+                <input type="text" name="telefono" class="form-control" value="{{ old('telefono') }}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Dirección</label>
+                <input type="text" name="direccion" class="form-control" value="{{ old('direccion') }}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Género</label>
+                <select name="genero" class="form-select" required>
+                    <option value="">Seleccionar</option>
+                    <option value="masculino" @selected(old('genero') == 'masculino')>Masculino</option>
+                    <option value="femenino" @selected(old('genero') == 'femenino')>Femenino</option>
+                    <option value="otro" @selected(old('genero') == 'otro')>Otro</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Activo</label>
-                <select name="activo" class="form-select">
+                <select name="activo" class="form-select" required>
                     <option value="1" @selected(old('activo') == 1)>Sí</option>
                     <option value="0" @selected(old('activo') == 0)>No</option>
                 </select>

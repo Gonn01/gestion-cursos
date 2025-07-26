@@ -21,7 +21,7 @@ class InscripcionController extends Controller
         $alumnos = Alumno::where('activo', true)->get();
         $cursos = Curso::where('estado', 'activo')->get();
 
-        return view('inscripciones.create', compact('alumnos', 'cursos'));
+        return view('inscripciones.form', compact('alumnos', 'cursos'));
     }
 
     public function store(Request $request)
@@ -81,7 +81,7 @@ class InscripcionController extends Controller
         $alumnos = Alumno::where('activo', true)->get();
         $cursos = Curso::where('estado', 'activo')->get();
 
-        return view('inscripciones.edit', compact('inscripcion', 'alumnos', 'cursos'));
+        return view('inscripciones.form', compact('inscripcion', 'alumnos', 'cursos'));
     }
 
     public function update(Request $request, Inscripcion $inscripcion)

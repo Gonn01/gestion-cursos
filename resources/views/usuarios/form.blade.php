@@ -46,7 +46,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Contraseña {{ isset($usuario) ? '(dejar vacío para mantener)' : '' }}</label>
-                <input type="password" name="password" class="form-control" {{ isset($usuario) ? '' : 'required' }}>
+                <input type="password" name="password" class="form-control" autocomplete="new-password" {{ isset($usuario) ? '' : 'required' }}>
             </div>
 
             <button class="btn btn-success">{{ isset($usuario) ? 'Actualizar' : 'Guardar' }}</button>

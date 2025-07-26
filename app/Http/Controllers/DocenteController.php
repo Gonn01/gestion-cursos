@@ -15,7 +15,7 @@ class DocenteController extends Controller
 
     public function create()
     {
-        return view('docentes.create');
+        return view('docentes.form');
     }
 
     public function store(Request $request)
@@ -47,7 +47,7 @@ class DocenteController extends Controller
 
     public function edit(Docente $docente)
     {
-        return view('docentes.edit', compact('docente'));
+        return view('docentes.form', compact('docente'));
     }
 
     public function update(Request $request, Docente $docente)

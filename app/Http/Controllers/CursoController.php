@@ -17,7 +17,7 @@ class CursoController extends Controller
     public function create()
     {
         $docentes = Docente::where('activo', true)->get();
-        return view('cursos.create', compact('docentes'));
+        return view('cursos.form', compact('docentes'));
     }
 
     public function store(Request $request)
@@ -64,7 +64,7 @@ class CursoController extends Controller
     public function edit(Curso $curso)
     {
         $docentes = Docente::where('activo', true)->get();
-        return view('cursos.edit', compact('curso', 'docentes'));
+        return view('cursos.form', compact('curso', 'docentes'));
     }
 
     public function update(Request $request, Curso $curso)

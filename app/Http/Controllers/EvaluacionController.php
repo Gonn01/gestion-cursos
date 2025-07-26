@@ -19,7 +19,7 @@ class EvaluacionController extends Controller
     {
         $alumnos = Alumno::all();
         $cursos = Curso::all();
-        return view('evaluaciones.create', compact('alumnos', 'cursos'));
+        return view('evaluaciones.form', compact('alumnos', 'cursos'));
     }
 
     public function store(Request $request)
@@ -47,7 +47,7 @@ class EvaluacionController extends Controller
     {
         $alumnos = Alumno::all();
         $cursos = Curso::all();
-        return view('evaluaciones.edit', compact('evaluacion', 'alumnos', 'cursos'));
+        return view('evaluaciones.form', compact('evaluacion', 'alumnos', 'cursos'));
     }
 
     public function update(Request $request, Evaluacion $evaluacion)

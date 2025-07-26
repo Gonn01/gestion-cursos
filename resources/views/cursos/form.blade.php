@@ -64,6 +64,16 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Estado</label>
+                <select name="estado" class="form-select" required>
+                    <option value="activo" @selected(old('estado', $curso->estado ?? '') == 'activo')>Activo</option>
+                    <option value="finalizado" @selected(old('estado', $curso->estado ?? '') == 'finalizado')>Finalizado
+                    </option>
+                    <option value="cancelado" @selected(old('estado', $curso->estado ?? '') == 'cancelado')>Cancelado</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Cupo Máximo</label>
                 <input type="number" name="cupo_maximo" value="{{ old('cupo_maximo', $curso->cupo_maximo ?? '') }}"
                     class="form-control" required min="1">
@@ -75,7 +85,7 @@
                     <option value="">Seleccione uno</option>
                     @foreach ($docentes as $docente)
                         <option value="{{ $docente->id }}" @selected(old('docente_id', $curso->docente_id ?? '') == $docente->id)>
-                            {{ $docente->nombre }}
+                            {{ $docente->nombre }} {{ $docente->apellido }}
                         </option>
                     @endforeach
                 </select>

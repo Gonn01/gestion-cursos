@@ -15,7 +15,7 @@ class AlumnoController extends Controller
 
     public function create()
     {
-        return view('alumnos.create');
+        return view('alumnos.form');
     }
 
     public function store(Request $request)
@@ -47,7 +47,7 @@ class AlumnoController extends Controller
 
     public function edit(Alumno $alumno)
     {
-        return view('alumnos.edit', compact('alumno'));
+        return view('alumnos.form', compact('alumno'));
     }
 
     public function update(Request $request, Alumno $alumno)

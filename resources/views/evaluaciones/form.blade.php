@@ -28,7 +28,7 @@
                 <select name="alumno_id" class="form-select" required>
                     @foreach ($alumnos as $alumno)
                         <option value="{{ $alumno->id }}" @selected(old('alumno_id', $evaluacion->alumno_id ?? '') == $alumno->id)>
-                            {{ $alumno->nombre }}
+                            {{ $alumno->nombre }} {{ $alumno->apellido }}
                         </option>
                     @endforeach
                 </select>
@@ -46,6 +46,12 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <input type="text" name="descripcion" value="{{ old('descripcion', $evaluacion->descripcion ?? '') }}"
+                    class="form-control" required>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Fecha</label>
                 <input type="date" name="fecha" value="{{ old('fecha', $evaluacion->fecha ?? '') }}" class="form-control"
                     required>
@@ -53,7 +59,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Nota</label>
-                <input type="number" step="0.01" name="nota" value="{{ old('nota', $evaluacion->nota ?? '') }}"
+                <input type="number" name="nota" min="1" max="10" value="{{ old('nota', $evaluacion->nota ?? '') }}"
                     class="form-control" required>
             </div>
 

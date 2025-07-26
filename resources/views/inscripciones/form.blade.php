@@ -25,7 +25,7 @@
                     <option value="">Seleccione un alumno</option>
                     @foreach ($alumnos as $alumno)
                         <option value="{{ $alumno->id }}" @selected(old('alumno_id') == $alumno->id)>
-                            {{ $alumno->nombre }} ({{ $alumno->dni }})
+                            {{ $alumno->nombre }} {{ $alumno->apellido }} ({{ $alumno->dni }})
                         </option>
                     @endforeach
                 </select>
@@ -45,9 +45,31 @@
 
             <div class="mb-3">
                 <label class="form-label">Fecha de Inscripción</label>
-                <input type="date" name="fecha" value="{{ old('fecha', now()->format('Y-m-d')) }}" class="form-control"
-                    required>
+                <input type="date" name="fecha_inscripcion" value="{{ old('fecha_inscripcion', now()->format('Y-m-d')) }}"
+                    class="form-control" required>
             </div>
+
+            <div class="mb-3">
+                <label class="form-label">Estado</label>
+                <select name="estado" class="form-select" required>
+                    <option value="activo" @selected(old('estado') == 'activo')>Activo</option>
+                    <option value="aprobado" @selected(old('estado') == 'aprobado')>Aprobado</option>
+                    <option value="desaprobado" @selected(old('estado') == 'desaprobado')>Desaprobado</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Asistencias</label>
+                <input type="number" name="asistencias" value="{{ old('asistencias', 0) }}" class="form-control" min="0">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Observaciones</label>
+                <textarea name="observaciones" class="form-control">{{ old('observaciones') }}</textarea>
+            </div>
+
+            <input type="hidden" name="nota_final" value="{{ old('nota_final') }}">
+            <input type="hidden" name="evaluado_por_docente" value="0">
 
             <button class="btn btn-success">Guardar Inscripción</button>
         </form>

@@ -33,16 +33,29 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Nombre del archivo</label>
-                <input type="text" name="nombre" value="{{ old('nombre') }}" class="form-control" required>
+                <label class="form-label">Título del archivo</label>
+                <input type="text" name="titulo" value="{{ old('titulo') }}" class="form-control" required>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Archivo</label>
+                <label class="form-label">Tipo de archivo</label>
+                <select name="tipo" class="form-select" required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="tarea" @selected(old('tipo') == 'tarea')>Tarea</option>
+                    <option value="material" @selected(old('tipo') == 'material')>Material</option>
+                    <option value="guía" @selected(old('tipo') == 'guía')>Guía</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Archivo (PDF, DOCX, PPT, JPG, PNG)</label>
                 <input type="file" name="archivo" class="form-control" required>
             </div>
 
-            <button class="btn btn-success">Subir Archivo</button>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-success">Subir Archivo</button>
+                <a href="{{ route('archivos_adjuntos.index') }}" class="btn btn-secondary">Cancelar</a>
+            </div>
         </form>
     </div>
 @endsection

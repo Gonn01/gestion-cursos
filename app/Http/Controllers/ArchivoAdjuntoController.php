@@ -20,7 +20,7 @@ class ArchivoAdjuntoController extends Controller
     public function create()
     {
         $cursos = Curso::all();
-        return view('archivos_adjuntos.create', compact('cursos'));
+        return view('archivos_adjuntos.form', compact('cursos'));
     }
 
     public function store(Request $request)

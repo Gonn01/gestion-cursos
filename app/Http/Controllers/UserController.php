@@ -22,19 +22,18 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+            'password' => 'required|string|min:6|confirmed',
             'rol' => 'required|in:admin,coordinador',
         ]);
 
         User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'rol' => $request->input('rol'),
-            'password' => Hash::make($request->input('password')),
+            'name' => $request->name,
+            'email' => $request->email,
+            'rol' => $request->rol,
+            'password' => Hash::make($request->password),
         ]);
-
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
     }
@@ -47,20 +46,16 @@ class UserController extends Controller
     public function update(Request $request, User $usuario)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $usuario->id,
             'rol' => 'required|in:admin,coordinador',
-            'password' => 'nullable|min:6',
+            'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        $data = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'rol' => $request->input('rol'),
-        ];
+        $data = $request->only(['name', 'email', 'rol']);
 
         if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->input('password'));
+            $data['password'] = Hash::make($request->password);
         }
 
         $usuario->update($data);

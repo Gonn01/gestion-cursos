@@ -12,17 +12,19 @@ return new class extends Migration {
     {
         Schema::create('inscripciones', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('alumno_id');
-            $table->unsignedBigInteger('curso_id');
+            $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
+            $table->foreignId('curso_id')->constrained('cursos')->onDelete('cascade');
+            $table->date('fecha_inscripcion');
             $table->enum('estado', ['activo', 'aprobado', 'desaprobado']);
-            $table->tinyInteger('nota')->nullable();
-            $table->tinyInteger('asistencia')->default(0);
+            $table->unsignedTinyInteger('nota_final')->nullable();
+            $table->integer('asistencias')->default(0);
+            $table->text('observaciones')->nullable();
+            $table->boolean('evaluado_por_docente')->default(false);
             $table->timestamps();
 
             $table->unique(['alumno_id', 'curso_id']);
-            $table->foreign('alumno_id')->references('id')->on('alumnos')->onDelete('cascade');
-            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
         });
+
     }
 
     /**

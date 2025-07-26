@@ -12,14 +12,14 @@ return new class extends Migration {
     {
         Schema::create('evaluaciones', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('alumno_id');
-            $table->unsignedBigInteger('curso_id');
-            $table->tinyInteger('nota');
+            $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
+            $table->foreignId('curso_id')->constrained('cursos')->onDelete('cascade');
+            $table->string('descripcion');
+            $table->unsignedTinyInteger('nota');
+            $table->date('fecha');
             $table->timestamps();
-
-            $table->foreign('alumno_id')->references('id')->on('alumnos')->onDelete('cascade');
-            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
         });
+
     }
 
     /**

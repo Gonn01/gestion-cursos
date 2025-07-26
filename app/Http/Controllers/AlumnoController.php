@@ -21,16 +21,27 @@ class AlumnoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required',
+            'nombre' => 'required|string',
+            'apellido' => 'required|string',
             'dni' => 'required|numeric|digits_between:7,8|unique:alumnos,dni',
             'email' => 'required|email|unique:alumnos,email',
             'fecha_nacimiento' => 'required|date|before:-16 years',
             'telefono' => 'nullable|string',
             'direccion' => 'nullable|string',
-            'genero' => 'nullable|in:Masculino,Femenino,Otro',
+            'genero' => 'required|in:masculino,femenino,otro',
         ]);
 
-        Alumno::create($request->all());
+        Alumno::create($request->only([
+            'nombre',
+            'apellido',
+            'dni',
+            'email',
+            'fecha_nacimiento',
+            'telefono',
+            'direccion',
+            'genero'
+        ]));
+
         return redirect()->route('alumnos.index')->with('success', 'Alumno creado correctamente.');
     }
 
@@ -43,16 +54,26 @@ class AlumnoController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string',
+            'apellido' => 'required|string',
             'dni' => 'required|numeric|digits_between:7,8|unique:alumnos,dni,' . $alumno->id,
             'email' => 'required|email|unique:alumnos,email,' . $alumno->id,
             'fecha_nacimiento' => 'required|date|before:-16 years',
             'telefono' => 'nullable|string',
             'direccion' => 'nullable|string',
-            'genero' => 'nullable|in:Masculino,Femenino,Otro',
+            'genero' => 'required|in:masculino,femenino,otro',
         ]);
 
+        $alumno->update($request->only([
+            'nombre',
+            'apellido',
+            'dni',
+            'email',
+            'fecha_nacimiento',
+            'telefono',
+            'direccion',
+            'genero'
+        ]));
 
-        $alumno->update($request->all());
         return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado correctamente.');
     }
 
@@ -61,5 +82,4 @@ class AlumnoController extends Controller
         $alumno->delete();
         return redirect()->route('alumnos.index')->with('success', 'Alumno eliminado.');
     }
-
 }

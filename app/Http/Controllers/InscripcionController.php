@@ -6,7 +6,7 @@ use App\Models\Inscripcion;
 use App\Models\Alumno;
 use App\Models\Curso;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class InscripcionController extends Controller
 {
@@ -19,7 +19,8 @@ class InscripcionController extends Controller
     public function create()
     {
         $alumnos = Alumno::where('activo', true)->get();
-        $cursos = Curso::where('activo', true)->get();
+        $cursos = Curso::where('estado', 'activo')->get();
+
         return view('inscripciones.create', compact('alumnos', 'cursos'));
     }
 
@@ -28,41 +29,49 @@ class InscripcionController extends Controller
         $request->validate([
             'alumno_id' => 'required|exists:alumnos,id',
             'curso_id' => 'required|exists:cursos,id',
-            'fecha' => 'required|date',
+            'fecha_inscripcion' => 'required|date',
+            'estado' => 'required|in:activo,aprobado,desaprobado',
+            'nota_final' => 'nullable|integer|min:1|max:10',
+            'asistencias' => 'nullable|integer|min:0',
+            'observaciones' => 'nullable|string',
         ]);
 
         $alumno = Alumno::findOrFail($request->alumno_id);
 
-        // ✅ Verificación de estado
         if (!$alumno->activo) {
             return back()->withErrors(['alumno_id' => 'El alumno está inactivo.'])->withInput();
         }
 
-        // ✅ Verificación de edad (mayor de 16 años)
-        $edad = Carbon::parse($alumno->fecha_nacimiento)->age;
-        if ($edad < 16) {
-            return back()->withErrors(['alumno_id' => 'El alumno debe ser mayor de 16 años.'])->withInput();
+        if (Carbon::parse($alumno->fecha_nacimiento)->age < 16) {
+            return back()->withErrors(['alumno_id' => 'El alumno debe tener al menos 16 años.'])->withInput();
         }
 
-        // ✅ Verificación de cursos activos
-        $cursosActivos = Inscripcion::where('alumno_id', $alumno->id)
-            ->whereHas('curso', fn($q) => $q->where('activo', true))
+        $inscripcionesActivas = Inscripcion::where('alumno_id', $alumno->id)
+            ->where('estado', 'activo')
             ->count();
 
-        if ($cursosActivos >= 5) {
+        if ($inscripcionesActivas >= 5) {
             return back()->withErrors(['alumno_id' => 'El alumno ya tiene 5 cursos activos.'])->withInput();
         }
 
-        // ✅ Verificar si ya existe la inscripción
-        $existe = Inscripcion::where('alumno_id', $request->alumno_id)
+        $yaInscripto = Inscripcion::where('alumno_id', $request->alumno_id)
             ->where('curso_id', $request->curso_id)
             ->exists();
 
-        if ($existe) {
+        if ($yaInscripto) {
             return back()->withErrors(['alumno_id' => 'El alumno ya está inscripto en este curso.'])->withInput();
         }
 
-        Inscripcion::create($request->only('alumno_id', 'curso_id', 'fecha'));
+        Inscripcion::create([
+            'alumno_id' => $request->alumno_id,
+            'curso_id' => $request->curso_id,
+            'fecha_inscripcion' => $request->fecha_inscripcion,
+            'estado' => $request->estado,
+            'nota_final' => $request->nota_final,
+            'asistencias' => $request->asistencias ?? 0,
+            'observaciones' => $request->observaciones,
+            'evaluado_por_docente' => false,
+        ]);
 
         return redirect()->route('inscripciones.index')->with('success', 'Inscripción registrada.');
     }
@@ -70,7 +79,8 @@ class InscripcionController extends Controller
     public function edit(Inscripcion $inscripcion)
     {
         $alumnos = Alumno::where('activo', true)->get();
-        $cursos = Curso::where('activo', true)->get();
+        $cursos = Curso::where('estado', 'activo')->get();
+
         return view('inscripciones.edit', compact('inscripcion', 'alumnos', 'cursos'));
     }
 
@@ -79,15 +89,22 @@ class InscripcionController extends Controller
         $request->validate([
             'alumno_id' => 'required|exists:alumnos,id',
             'curso_id' => 'required|exists:cursos,id',
-            'fecha' => 'required|date',
+            'fecha_inscripcion' => 'required|date',
+            'estado' => 'required|in:activo,aprobado,desaprobado',
+            'nota_final' => 'nullable|integer|min:1|max:10',
+            'asistencias' => 'nullable|integer|min:0',
+            'observaciones' => 'nullable|string',
         ]);
 
-        // Validación extra: evitar inscripción de alumnos inactivos
-        if (!$inscripcion->alumno->activo) {
-            return back()->withErrors(['alumno_id' => 'El alumno está inactivo y no puede inscribirse.'])->withInput();
-        }
-
-        $inscripcion->update($request->only('alumno_id', 'curso_id', 'fecha'));
+        $inscripcion->update($request->only([
+            'alumno_id',
+            'curso_id',
+            'fecha_inscripcion',
+            'estado',
+            'nota_final',
+            'asistencias',
+            'observaciones'
+        ]));
 
         return redirect()->route('inscripciones.index')->with('success', 'Inscripción actualizada correctamente.');
     }

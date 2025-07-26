@@ -22,13 +22,25 @@ class DocenteController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
             'dni' => 'required|numeric|digits_between:7,8|unique:docentes,dni',
             'email' => 'required|email|unique:docentes,email',
-            'fecha_nacimiento' => 'required|date|before:-18 years',
+            'especialidad' => 'required|string|max:255',
+            'telefono' => 'required|string|max:20',
+            'direccion' => 'required|string|max:255',
             'activo' => 'required|boolean',
         ]);
 
-        Docente::create($request->all());
+        Docente::create($request->only([
+            'nombre',
+            'apellido',
+            'dni',
+            'email',
+            'especialidad',
+            'telefono',
+            'direccion',
+            'activo'
+        ]));
 
         return redirect()->route('docentes.index')->with('success', 'Docente creado correctamente.');
     }
@@ -42,13 +54,25 @@ class DocenteController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
             'dni' => 'required|numeric|digits_between:7,8|unique:docentes,dni,' . $docente->id,
             'email' => 'required|email|unique:docentes,email,' . $docente->id,
-            'fecha_nacimiento' => 'required|date|before:-18 years',
+            'especialidad' => 'required|string|max:255',
+            'telefono' => 'required|string|max:20',
+            'direccion' => 'required|string|max:255',
             'activo' => 'required|boolean',
         ]);
 
-        $docente->update($request->all());
+        $docente->update($request->only([
+            'nombre',
+            'apellido',
+            'dni',
+            'email',
+            'especialidad',
+            'telefono',
+            'direccion',
+            'activo'
+        ]));
 
         return redirect()->route('docentes.index')->with('success', 'Docente actualizado correctamente.');
     }

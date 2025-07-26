@@ -8,6 +8,7 @@ class Alumno extends Model
 {
     protected $fillable = [
         'nombre',
+        'apellido',
         'dni',
         'email',
         'fecha_nacimiento',
@@ -17,4 +18,13 @@ class Alumno extends Model
         'activo',
     ];
 
+    public function inscripciones()
+    {
+        return $this->hasMany(Inscripcion::class);
+    }
+
+    public function evaluaciones()
+    {
+        return $this->hasMany(Evaluacion::class);
+    }
 }

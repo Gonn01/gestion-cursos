@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArchivoAdjunto;
+use App\Models\Curso;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ArchivoAdjuntoController extends Controller
 {
@@ -23,15 +27,19 @@ class ArchivoAdjuntoController extends Controller
     {
         $request->validate([
             'curso_id' => 'required|exists:cursos,id',
+            'titulo' => 'required|string|max:255',
+            'tipo' => 'required|in:tarea,material,guía',
             'archivo' => 'required|mimes:pdf,docx,ppt,jpg,png|max:2048',
         ]);
 
-        $file = $request->file('archivo')->store('archivos_adjuntos');
+        $filePath = $request->file('archivo')->store('archivos_adjuntos');
 
         ArchivoAdjunto::create([
             'curso_id' => $request->curso_id,
-            'archivo' => $file,
-            'tipo' => $request->file('archivo')->extension(),
+            'titulo' => $request->titulo,
+            'archivo_url' => $filePath,
+            'tipo' => $request->tipo,
+            'fecha_subida' => Carbon::now()->toDateString(),
         ]);
 
         return redirect()->route('archivos_adjuntos.index')->with('success', 'Archivo adjunto subido.');
@@ -39,7 +47,7 @@ class ArchivoAdjuntoController extends Controller
 
     public function destroy(ArchivoAdjunto $archivo)
     {
-        \Storage::delete($archivo->archivo);
+        Storage::delete($archivo->archivo_url);
         $archivo->delete();
 
         return redirect()->route('archivos_adjuntos.index')->with('success', 'Archivo eliminado.');

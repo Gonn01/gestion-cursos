@@ -8,10 +8,13 @@ class Docente extends Model
 {
     protected $fillable = [
         'nombre',
+        'apellido',
         'dni',
         'email',
-        'fecha_nacimiento',
-        'activo'
+        'especialidad',
+        'telefono',
+        'direccion',
+        'activo',
     ];
 
     public function cursos()

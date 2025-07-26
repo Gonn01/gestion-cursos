@@ -10,12 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('alumnos', function (Blueprint $table) {
-
-            $table->string('telefono')->nullable();
-            $table->string('direccion')->nullable();
-            $table->string('genero')->nullable();
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->enum('rol', ['admin', 'coordinador']);
+            $table->timestamps();
         });
+
     }
 
     /**
@@ -23,8 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('alumnos', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('users');
     }
 };

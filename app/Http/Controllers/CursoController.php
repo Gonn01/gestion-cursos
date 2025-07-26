@@ -29,22 +29,34 @@ class CursoController extends Controller
             'aula_virtual' => 'nullable|string',
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after:fecha_inicio',
+            'estado' => 'required|in:activo,finalizado,cancelado',
             'cupo_maximo' => 'required|integer|min:1',
             'docente_id' => 'required|exists:docentes,id',
         ]);
 
-        // Si es virtual o híbrido, aula_virtual es obligatorio
         if (in_array($request->modalidad, ['virtual', 'hibrido']) && empty($request->aula_virtual)) {
             return back()->withErrors(['aula_virtual' => 'El campo aula virtual es obligatorio en modalidad virtual o híbrida.'])->withInput();
         }
 
-        // Docente no puede tener más de 3 cursos activos
-        $cursosActivos = Curso::where('docente_id', $request->docente_id)->where('activo', true)->count();
+        $cursosActivos = Curso::where('docente_id', $request->docente_id)
+            ->where('estado', 'activo')
+            ->count();
+
         if ($cursosActivos >= 3) {
             return back()->withErrors(['docente_id' => 'El docente ya tiene 3 cursos activos.'])->withInput();
         }
 
-        Curso::create($request->all());
+        Curso::create($request->only([
+            'titulo',
+            'descripcion',
+            'modalidad',
+            'aula_virtual',
+            'fecha_inicio',
+            'fecha_fin',
+            'estado',
+            'cupo_maximo',
+            'docente_id'
+        ]));
 
         return redirect()->route('cursos.index')->with('success', 'Curso creado con éxito.');
     }
@@ -64,6 +76,7 @@ class CursoController extends Controller
             'aula_virtual' => 'nullable|string',
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after:fecha_inicio',
+            'estado' => 'required|in:activo,finalizado,cancelado',
             'cupo_maximo' => 'required|integer|min:1',
             'docente_id' => 'required|exists:docentes,id',
         ]);
@@ -72,7 +85,17 @@ class CursoController extends Controller
             return back()->withErrors(['aula_virtual' => 'El campo aula virtual es obligatorio.'])->withInput();
         }
 
-        $curso->update($request->all());
+        $curso->update($request->only([
+            'titulo',
+            'descripcion',
+            'modalidad',
+            'aula_virtual',
+            'fecha_inicio',
+            'fecha_fin',
+            'estado',
+            'cupo_maximo',
+            'docente_id'
+        ]));
 
         return redirect()->route('cursos.index')->with('success', 'Curso actualizado con éxito.');
     }

@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('rol', ['admin', 'coordinador']);
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken(); // 👈 crea la columna remember_token
             $table->timestamps();
         });
 

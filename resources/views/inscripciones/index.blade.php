@@ -24,7 +24,7 @@
                         <th>Curso</th>
                         <th>Fecha de Inscripción</th>
                         <th>Estado</th>
-                        <th>Asistencias</th>
+                        <th>Asistencias(%)</th>
                         <th>Nota Final</th>
                         <th class="text-end">Acciones</th>
                     </tr>

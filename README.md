@@ -24,3 +24,33 @@ El sistema cumple con una serie de validaciones críticas para mantener la integ
 
 A nivel técnico, el sistema utiliza migraciones, relaciones entre modelos mediante Eloquent, validaciones del lado del servidor, y vistas Blade con layouts reutilizables.
 El frontend está integrado con Bootstrap y gestionado mediante Vite, mientras que la autenticación y el manejo de sesiones aprovechan los mecanismos provistos por Laravel.
+
+![Login](image.png)
+- Login
+
+![Dashboard admin](image-1.png)
+- Dashboard cuando sos admin
+
+![Dashboard coordinador](image-2.png)
+- Dashboard cunado sos coordinador
+
+![Listado de alumnos](image-3.png)
+- Listado de alumnos con las opciones para hacer el crud
+
+![Validacion edad alumno](image-4.png)
+- Validacion de edad al crear/editar alumno
+
+![Listado docentes](image-5.png)
+- Listado de docentes solo para admins
+
+![Listado de cursos](image-6.png)
+- Listado de cursos
+
+![Inscripcion a curso](image-7.png)
+- Solo se puede inscribir a alumnos activos por ej a Diego Fernandez no.
+
+![Listado de Evaluaciones](image-8.png)
+- Listado de evaluaciones
+
+![Listado de archivos adjuntos](image-9.png)
+- Listado de archivos adjuntos

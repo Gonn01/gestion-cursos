@@ -15,8 +15,8 @@ SET FOREIGN_KEY_CHECKS
 INSERT INTO users
     (id, name, email, password, rol, created_at, updated_at)
 VALUES
-    (1, 'Admin', 'admin@example.com', '$2y$12$EXAMPLEHASHEDPASSWORD', 'admin', NOW(), NOW()),
-    (2, 'Coordinador', 'coordinador@example.com', '$2y$12$EXAMPLEHASHEDPASSWORD', 'coordinador', NOW(), NOW());
+    (1, 'Admin', 'admin@example.com', '$2y$12$nYxZlKLNuKqv34YKVlbiOeoFFaTld9oVKr1YMTgCx3YG.70rMDtNO', 'admin', NOW(), NOW()),
+    (2, 'Coordinador', 'coordinador@example.com', '$2y$12$nYxZlKLNuKqv34YKVlbiOeoFFaTld9oVKr1YMTgCx3YG.70rMDtNO', 'coordinador', NOW(), NOW());
 
 INSERT INTO docentes
     (id, nombre, apellido, dni, email, especialidad, telefono, direccion, activo, created_at, updated_at)
